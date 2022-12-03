@@ -1,10 +1,24 @@
+host:
+
+port:
+  mysql: 33306
+  redis: 63379
+
 spring:
   datasource:
     hikari:
-      jdbc-url: jdbc:mysql://0.tcp.jp.ngrok.io:12000/sojuton?serverTimezone=Asia/Seoul
+      jdbc-url: jdbc:mysql://${host.name}:${port.mysql}/sojuton?serverTimezone=Asia/Seoul
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: sojuton_user
       password: root!@
+  redis:
+    host: ${host.name}
+    port: ${port.redis}
+    password: sojuton!
+    session:
+      store-type: redis
+      redis:
+        flush-mode: ON_SAVE
 
 
 mybatis:
