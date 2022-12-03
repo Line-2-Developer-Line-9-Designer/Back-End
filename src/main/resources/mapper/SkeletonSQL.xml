@@ -6,7 +6,7 @@
 <mapper namespace="org.sojuton.skeleton.model.dao.SkeletonDao">
 
     <select id="test" resultType="String">
-        SELECT 'test'
+        SELECT 'test222'
     </select>
 
 </mapper>
