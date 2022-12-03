@@ -1,4 +1,5 @@
 host:
+  name: 10.10.4.183
 
 port:
   mysql: 33306
@@ -26,3 +27,7 @@ mybatis:
   type-aliases-package: org.sojuton.*.model.dto
   configuration:
     map-underscore-to-camel-case: true
+
+
+jwt:
+  secret-key: 'sojuton'
