@@ -29,7 +29,10 @@ public class PaperController {
 
     @PostMapping
     @RequestMapping("/list")
-    public ResponseEntity retrievePaperList(PaperDto vo) {
+    public ResponseEntity retrievePaperList(@RequestBody PaperDto vo, HttpServletRequest req) {
+        String token = jwtTokenProvider.resolveAccessToken(req);
+        vo.setCreateUserSeq(Integer.parseInt(jwtTokenProvider.getUserSeqByToken(token)));
+
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("RESULT", null);
         result.put("CODE", "FAIL");

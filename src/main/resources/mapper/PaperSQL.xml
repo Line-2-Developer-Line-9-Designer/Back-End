@@ -28,6 +28,9 @@
                      create_date DESC
              ) tpt ON tp.paper_seq = tpt.paper_seq
              LEFT JOIN tb_user tu ON tp.create_user_seq = tu.user_seq
+             <if test='gubun.equals("M")'>
+             LEFT JOIN tb_paper_text tpt2 ON tp.paper_seq = tpt2.paper_seq AND tpt2.create_user_seq = #{createUserSeq}
+             </if>
     </select>
 
     <!-- 롤링페이퍼 상세 목록 -->
