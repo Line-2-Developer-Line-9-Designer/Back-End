@@ -3,9 +3,49 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="org.sojuton.skeleton.model.dao.PaperDAO">
+<mapper namespace="org.sojuton.paper.model.dao.PaperDao">
+    <!-- 롤링페이어 목록 -->
+    <select id="retrievePaperList" parameterType="PaperDto" resultType="HashMap">
+        SELECT
+            tp.paper_seq,
+            tp.title,
+            tp.like_cnt,
+            IFNULL(tpt.user_cnt, 0) AS user_cnt,
+            IFNULL(tpt.create_date, tp.create_date) AS create_date,
+            tu.nick_name
+        FROM tb_paper tp
+            LEFT OUTER JOIN
+             (
+                 SELECT
+                     paper_seq,
+                     IFNULL(COUNT(text_write_seq), 0) AS user_cnt,
+                     create_date
+                 FROM
+                     tb_paper_text
+                 GROUP BY
+                     paper_seq, create_date
+                 ORDER BY
+                     create_date DESC
+             ) tpt ON tp.paper_seq = tpt.paper_seq
+             LEFT JOIN tb_user tu ON tp.create_user_seq = tu.user_seq
+    </select>
 
-    <insert id="insertPaper">
+    <!-- 롤링페이퍼 상세 목록 -->
+    <select id="retrievePaperTextList" parameterType="PaperDto" resultType="HashMap">
+        SELECT
+            tpt.text_write_seq,
+            tpt.paper_text,
+            tpt.create_date,
+            tu.nick_name
+        FROM tb_paper tp
+        LEFT OUTER JOIN tb_paper_text tpt ON tp.paper_seq = tpt.paper_seq
+        LEFT OUTER JOIN tb_user tu on tpt.create_user_seq = tu.user_seq
+        WHERE tpt.paper_seq = #{paperSeq}
+        ORDER BY tpt.create_date ASC
+    </select>
+
+    <!-- 롤링페이퍼 생성 -->
+    <insert id="insertPaper" parameterType="PaperDto">
         INSERT INTO tb_paper
         (
             title,
@@ -14,13 +54,44 @@
         )
         VALUES
         (
-            ${title}$,
-            ${createUserSeq}$,
-            now()
+            #{title},
+            #{createUserSeq},
+            NOW()
         )
     </insert>
-    <select id="" resultType="String">
-        SELECT 'test'
-    </select>
 
+    <!-- 롤링페이퍼 상세 생성 -->
+    <insert id="insertPaperText" parameterType="PaperDto">
+        INSERT INTO tb_paper_text
+        (
+            paper_seq,
+            paper_text,
+            create_user_seq,
+            create_date
+        )
+        VALUES
+        (
+            #{paperSeq},
+            #{paperText},
+            #{createUserSeq},
+            NOW()
+        )
+    </insert>
+
+    <!-- 롤링페이퍼 상세 삭제 -->
+    <delete id="deletePaperText" parameterType="PaperDto">
+        DELETE FROM tb_paper_text WHERE paper_seq = #{paperSeq}
+    </delete>
+
+    <!-- 롤링페이퍼 삭제 -->
+    <delete id="deletePaper" parameterType="PaperDto">
+        DELETE FROM tb_paper WHERE paper_seq = #{paperSeq}
+    </delete>
+
+    <!-- 롤링페이퍼 좋아요 증가 -->
+    <update id="updateLike">
+        UPDATE tb_paper
+        SET like_cnt = like_cnt + 1
+        WHERE paper_seq = #{paperSeq}
+    </update>
 </mapper>
