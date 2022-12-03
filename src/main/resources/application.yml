@@ -1,7 +1,7 @@
 spring:
   datasource:
     hikari:
-      jdbc-url: jdbc:mysql://0.tcp.jp.ngrok.io:12000/sojuton?serverTimezone=Asia/Seoul
+      jdbc-url: jdbc:mysql://10.10.4.183:33306/sojuton?serverTimezone=Asia/Seoul
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: sojuton_user
       password: root!@
