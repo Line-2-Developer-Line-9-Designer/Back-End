@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.sojuton.users.model.dao.UsersDao">
+
+    <insert id="signUp" parameterType="UsersDto">
+        Insert INTO TB_USER (
+          user_id
+        , nick_name
+        , pass_word
+        , icon_seq
+        )
+        VALUES (
+           #{userId}
+         , #{nickName}
+         , #{passWord}
+         , 1
+        )
+
+    </insert>
+    <select id="duplicateCheck" parameterType="String" resultType="int">
+        SELECT
+            count(user_id)
+        FROM
+            TB_USER
+        WHERE
+            user_id = #{userId}
+    </select>
+
+
+    <select id="signIn" parameterType="UsersDto" resultType="UsersDto">
+        SELECT
+            user_seq
+          , user_id
+          , nick_name
+          , pass_word
+          , icon_seq
+        FROM
+            TB_USER
+        WHERE
+             user_id = #{userId}
+        AND  pass_word = #{passWord}
+    </select>
+
+    <select id="getUserInfo" parameterType="String" resultType="UsersDto">
+        SELECT
+            user_seq
+             , user_id
+             , nick_name
+             , icon_seq
+        FROM
+            TB_USER
+        WHERE
+            user_seq = #{userSeq}
+    </select>
+
+</mapper>
