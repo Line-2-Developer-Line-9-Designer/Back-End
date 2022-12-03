@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.sojuton.users.model.dao.UsersDao">
+
+    <select id="login" resultType="UsersDto">
+        SELECT
+            user_seq
+          , nick_name
+          , pass_word
+          , icon_seq
+        FROM TB_USER
+    </select>
+
+</mapper>
