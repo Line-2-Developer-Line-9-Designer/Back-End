@@ -10,4 +10,5 @@ public class PaperDto {
     private String title;
     private Integer createUserSeq;
     private String paperText;
+    private String gubun = "A";
 }
