@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class UsersDto {
     private Long userSeq;
+    private String userId;
     private String nickName;
     private String passWord;
     private Long iconSeq;
