@@ -1,26 +1,18 @@
 host:
-  name: 10.10.4.183
+  name: localhost
 
-port:
-  mysql: 33306
-  redis: 63379
+driver:
+  h2: org.h2.Driver
+
+url:
+  h2: jdbc:h2:mem:testdb;MODE=MYSQL
 
 spring:
   datasource:
-    hikari:
-      jdbc-url: jdbc:mysql://${host.name}:${port.mysql}/sojuton?serverTimezone=Asia/Seoul
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: sojuton_user
-      password: root!@
-  redis:
-    host: ${host.name}
-    port: ${port.redis}
-    password: sojuton!
-    session:
-      store-type: redis
-      redis:
-        flush-mode: ON_SAVE
-
+    url: ${url.h2}
+    driver-class-name: ${driver.h2}
+    username: sa
+    password:
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml

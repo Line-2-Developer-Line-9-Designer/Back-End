@@ -2,11 +2,19 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.6'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'org'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExt
+}
 
 repositories {
     mavenCentral()
@@ -26,23 +34,49 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
-    /* H2 : InMemory DB */
-    runtimeOnly 'com.h2database:h2:2.1.212'
-
     /* log4jbc : SQL log */
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
+    /* spring rest Docs */
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.6.RELEASE'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.6.RELEASE'
 
     /* MySql */
     implementation 'com.mysql:mysql-connector-j:8.0.31'
 
-    /* Redis DB */
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.6.3'
-    implementation 'org.springframework.session:spring-session-data-redis:2.6.1'
-
     /* Jwt */
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    /* H2 : InMemory DB */
+    runtimeOnly 'com.h2database:h2:2.1.212'
+
+
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+tasks.named('asciidoctor') {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+//build에 있는 asciidoc을 resource 폴더로 카피함
+tasks.register('copyDocument', Copy) {
+    println "hihi"
+    dependsOn asciidoctor
+    from file("${asciidoctor.outputDir}")
+    into file("build/resources/main/static/docs")
+}
+
+tasks.named('bootJar') {
+    println "uuu"
+    dependsOn copyDocument
 }
