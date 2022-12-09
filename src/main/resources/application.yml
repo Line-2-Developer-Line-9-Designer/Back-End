@@ -7,6 +7,9 @@ driver:
 url:
   h2: jdbc:h2:mem:testdb;MODE=MYSQL
 
+server:
+  port: 8085
+
 spring:
   h2:
     console:
