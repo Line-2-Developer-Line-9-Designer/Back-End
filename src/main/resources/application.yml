@@ -5,7 +5,7 @@ driver:
   h2: org.h2.Driver
 
 url:
-  h2: jdbc:h2:~/testdb;MODE=MYSQL
+  h2: jdbc:h2:mem:testdb
 
 server:
   port: 8085
